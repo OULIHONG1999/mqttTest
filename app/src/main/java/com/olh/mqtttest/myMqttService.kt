@@ -94,16 +94,6 @@ class MyMqttService : Service() {
         override fun mqttErrorOccurred(exception: MqttException) {
         }
 
-//        @Throws(Exception::class)
-//        override fun messageArrived(topic: String, message: MqttMessage) {
-//            Log.i(TAG, "收到消息： " + String(message.payload))
-//            val intent = Intent(action)
-//            val bundle = Bundle()
-//            bundle.putString("MQTT_RevMsg", String(message.payload))
-//            intent.putExtras(bundle)
-//            sendBroadcast(intent)
-//        }
-
         @Throws(Exception::class)
         override fun messageArrived(topic: String, message: MqttMessage) {
             Log.i(TAG, "收到消息：" + String(message.payload))

@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val TAG = "nice-code"
-    private lateinit var mIntent: Intent
+//    private lateinit var mIntent: Intent
     private val MainActivity_broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == "com.olh.hypertool") { // 检查action是否匹配
@@ -45,9 +45,8 @@ class MainActivity : AppCompatActivity() {
         val btn_sent:Button = findViewById(R.id.btn_send)
 
         /************************* 开启服务 *************************/
-        mIntent = Intent(this, MyMqttService::class.java)
+        val mIntent : Intent = Intent(this, MyMqttService::class.java)
         startService(mIntent)
-        /************************* 开启服务 *************************/
 
         /************************* 通过广播接收的方式从MqttService中接收数据 *************************/
         // 在MainActivity中注册BroadcastReceiver
@@ -60,12 +59,21 @@ class MainActivity : AppCompatActivity() {
         btn_connect.setOnClickListener {
             val text_topic : String = edit_sub_topic.text.toString()
             Log.d(TAG,"主题: ${text_topic}")
+            // 判空
+            if (text_topic.isEmpty()) {
+                Log.d(TAG,"主题为空")
+                return@setOnClickListener
+            }
             MyMqttService.MQTT_Subscribe(text_topic)
         }
 
         btn_sent.setOnClickListener {
             val text_pub_topic = edit_pub_topic.text.toString()
             val text_msg = edit_msg.text.toString()
+            if (text_pub_topic.isEmpty() || text_msg.isEmpty()) {
+                Log.d(TAG,"主题或消息为空")
+                return@setOnClickListener
+            }
             // 设置发布主题和消息
             MyMqttService.MQTT_Publish(text_pub_topic,0,text_msg)
         }
